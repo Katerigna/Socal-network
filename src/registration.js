@@ -1,28 +1,32 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import axios from "axios";
+import axios from "./axios";
 
 export default class Registation extends React.Component {
     constructor(props) {
         super(props);
+        this.state = {};
         this.handleChange = this.handleChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
     handleChange(e) {
         this.setState(
             {
                 [e.target.name]: e.target.value
             },
-            () => console.log("this.state: ", this.state)
+            () => console.log("this.state in handleChange: ", this.state)
         );
     }
 
-    handldeSubmit(e) {
+    handleSubmit(e) {
         e.preventDefault();
+        console.log("this.state in  handleSubmit: ", this.state);
         axios
             .post("/register", this.state)
-            .then(response =>
-                console.log("Response from post register: ", response)
-            )
+            .then(response => {
+                console.log("Response from post register: ", response.data);
+                location.replace("/");
+            })
             .catch(err => console.log("err on post register: ", err));
     }
 
@@ -33,13 +37,37 @@ export default class Registation extends React.Component {
 
                 <form onSubmit={this.handleSubmit}>
                     <label htmlFor="first" />
-                    <input name="first" onChange={this.handleChange} />
+                    <input
+                        type="text"
+                        name="first"
+                        value={this.state.name}
+                        onChange={this.handleChange}
+                    />
+
                     <label htmlFor="last" />
-                    <input name="last" onChange={this.handleChange} />
+                    <input
+                        type="text"
+                        name="last"
+                        value={this.state.last}
+                        onChange={this.handleChange}
+                    />
+
                     <label htmlFor="email" />
-                    <input name="email" onChange={this.handleChange} />
+                    <input
+                        type="email"
+                        name="email"
+                        value={this.state.email}
+                        onChange={this.handleChange}
+                    />
+
                     <label htmlFor="password" />
-                    <input name="password" onChange={this.handleChange} />
+                    <input
+                        type="password"
+                        name="password"
+                        value={this.state.password}
+                        onChange={this.handleChange}
+                    />
+
                     <button>Submit</button>
                 </form>
             </div>
