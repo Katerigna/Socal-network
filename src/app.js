@@ -1,0 +1,44 @@
+import React from "react";
+import ProfilePic from "./profilepic";
+import Uploader from "./uploader";
+
+export class App extends React.Component {
+    constructor() {
+        super();
+        this.state = {
+            first: "Katia",
+            last: "Lingmann",
+            imageurl: "",
+            uploaderIsVisible: false
+        };
+        this.showModal = this.showModal.bind(this);
+    }
+
+    componentDidMount() {
+        console.log("App mounted");
+        //axios request to server to find user based on req.session.userId
+        //add it to state using setState
+    }
+
+    showModal() {
+        this.setState({
+            uploaderIsVisible: true
+        });
+    }
+
+    render() {
+        return (
+            <React.Fragment>
+                <ProfilePic
+                    first={this.state.first}
+                    last={this.state.last}
+                    imageurl={this.state.imageurl}
+                    showModal={this.state.showModal}
+                />
+                //this is the conditional rendering: is left hand side is true,
+                //it will show right hand side as well
+                {this.state.uploaderIsVisible && <Uploader />}
+            </React.Fragment>
+        );
+    }
+}

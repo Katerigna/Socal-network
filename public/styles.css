@@ -6,3 +6,32 @@
 body {
     background-color: #29538d;
 }
+
+.welcome-container {
+    display: grid;
+    grid-template-columns: 60% 40%;
+}
+
+.form-wrap {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-wrap input {
+    width: 200px;
+    height: 30px;
+    margin-bottom: 30px;
+    background-color: #93b8d3;
+    border: none;
+    color: #29538d;
+}
+
+.form-wrap button {
+    width: 100px;
+    height: 25px;
+    margin-top: 20px;
+    background-color: #f7b633;
+    color: #29538d;
+    border-color: #29538d;
+    border-radius: 4px;
+}

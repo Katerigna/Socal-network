@@ -46,6 +46,11 @@ if (process.env.NODE_ENV != "production") {
 }
 
 //routes
+
+app.get("/", (req, res) => {
+    res.redirect("/welcome");
+});
+
 app.post("/register", (req, res) => {
     console.log("request from post register: ", req.body);
 
@@ -55,7 +60,10 @@ app.post("/register", (req, res) => {
                 console.log("result from adding user to db: ", result.rows[0]);
                 res.json(result.rows[0]);
             })
-            .catch(err => console.log("error on adding user to db: ", err));
+            .catch(err => {
+                console.log("error on adding user to db: ", err.detail);
+                res.json(err.detail);
+            });
     });
 });
 

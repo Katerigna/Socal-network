@@ -24,10 +24,20 @@ export default class Registation extends React.Component {
         axios
             .post("/register", this.state)
             .then(response => {
-                console.log("Response from post register: ", response.data);
-                location.replace("/");
+                console.log("Response from post register: ", response);
+                if (response.data.id == undefined) {
+                    this.setState({
+                        error:
+                            "Oooops! Something went wrong... Please try again."
+                    });
+                    console.log("this.state in submit error: ", this.state);
+                } else {
+                    location.replace("/");
+                }
             })
-            .catch(err => console.log("err on post register: ", err));
+            .catch(err => {
+                console.log("err on post register: ", err);
+            });
     }
 
     render() {
@@ -35,7 +45,9 @@ export default class Registation extends React.Component {
             <div>
                 <h2>Please register</h2>
 
-                <form onSubmit={this.handleSubmit}>
+                <h3>{this.state.error}</h3>
+
+                <form onSubmit={this.handleSubmit} className="form-wrap">
                     <label htmlFor="first" />
                     <input
                         type="text"

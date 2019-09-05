@@ -6,10 +6,11 @@ import { HashRouter, Route, Link } from "react-router-dom";
 export default function Welcome() {
     return (
         <HashRouter>
-            <div>
-                <h1>Welcome!</h1>
+            <div className="welcome-container">
+                <img src="logo.png" />
 
-                <div>
+                <div className="form-container">
+                    <h1>Welcome!</h1>
                     <Route exact path="/" component={Registration} />
                 </div>
 
