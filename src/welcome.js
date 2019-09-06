@@ -11,6 +11,7 @@ export default function Welcome() {
 
                 <div className="form-container">
                     <h1>Welcome!</h1>
+                    <Route path="/login" component={Login} />
                     <Route exact path="/" component={Registration} />
                 </div>
 

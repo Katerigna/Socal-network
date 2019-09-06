@@ -1,13 +1,14 @@
 import React from "react";
 import ProfilePic from "./profilepic";
 import Uploader from "./uploader";
+import Profile from "./profile";
 
 export class App extends React.Component {
     constructor() {
         super();
         this.state = {
-            first: "Katia",
-            last: "Lingmann",
+            first: "Summer",
+            last: "Lover",
             imageurl: "",
             uploaderIsVisible: false
         };
@@ -34,6 +35,16 @@ export class App extends React.Component {
                     last={this.state.last}
                     imageurl={this.state.imageurl}
                     showModal={this.state.showModal}
+                />
+                <Profile
+                    first={this.state.first}
+                    url={this.state.image}
+                    last={this.state.last}
+                    showModal={() => {
+                        this.setState({ uploaderIsVisible: true });
+                    }}
+                    bio={this.state.bio}
+                    setBio={bio => {}}
                 />
                 //this is the conditional rendering: is left hand side is true,
                 //it will show right hand side as well

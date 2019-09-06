@@ -59,10 +59,29 @@ app.post("/register", (req, res) => {
             .then(result => {
                 console.log("result from adding user to db: ", result.rows[0]);
                 res.json(result.rows[0]);
+                req.session.userId = result.rows[0].id;
+                console.log("registered cookie: ", req.session.userId);
             })
             .catch(err => {
-                console.log("error on adding user to db: ", err.detail);
+                console.log("error on adding user to db: ", err);
                 res.json(err.detail);
+            });
+    });
+});
+
+app.post("/login", (req, res) => {
+    console.log("login request: ", req.body);
+
+    db.getPassword(req.body.email).then(result => {
+        console.log("db response password", result);
+        compare(req.body.password, result[0].password)
+            .then(match => {
+                console.log("did password match? ", match);
+                req.session.userId = result[0].id;
+                res.json(result[0].id);
+            })
+            .catch(err => {
+                console.log("error on login", err);
             });
     });
 });
