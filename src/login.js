@@ -24,14 +24,16 @@ export default class Login extends React.Component {
             .post("/login", this.state)
             .then(response => {
                 console.log("Response from post Login: ", response);
-                if (response.data == undefined) {
+                if (!response.data) {
                     this.setState({
                         error:
                             "Oooops! Something went wrong... Please try again."
                     });
                     console.log("this.state in submit error: ", this.state);
                 } else {
-                    location.replace("/app");
+                    this.setState({ id: response.data.id });
+                    console.log("cookie to give", response.data);
+                    location.replace(`/app + ${response.data}`);
                 }
             })
             .catch(err => {

@@ -7,7 +7,13 @@ export default function ProfilePic({ imageurl, first, last, showModal }) {
     return (
         <div>
             My name is {first} {last}
-            <img width="150" height="150" src={imageurl} onClick={showModal} />
+            <img
+                width="150"
+                height="150"
+                src={imageurl}
+                onClick={showModal}
+                alt={last}
+            />
         </div>
     );
 }

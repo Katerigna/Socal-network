@@ -1,14 +1,15 @@
 import React from "react";
+import axios from "./axios";
 import ProfilePic from "./profilepic";
 import Uploader from "./uploader";
 import Profile from "./profile";
 
 export class App extends React.Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
-            first: "Summer",
-            last: "Lover",
+            first: "",
+            last: "",
             imageurl: "",
             uploaderIsVisible: false
         };
@@ -17,8 +18,25 @@ export class App extends React.Component {
 
     componentDidMount() {
         console.log("App mounted");
+
         //axios request to server to find user based on req.session.userId
-        //add it to state using setState
+        axios
+            .get("/user")
+            .then(response => {
+                console.log("response from userdata", response);
+                //add it to state using setState
+                this.setState({
+                    first: response.data.first,
+                    last: response.data.last,
+                    imageurl: response.data.url,
+                    id: response.data.id,
+                    bio: response.data.bio
+                });
+                console.log("this.state", this.state);
+            })
+            .catch(err => {
+                console.log("error on get user", err);
+            });
     }
 
     showModal() {
@@ -30,6 +48,7 @@ export class App extends React.Component {
     render() {
         return (
             <React.Fragment>
+                <img className="logo" width="100" height="100" src="logo.png" />
                 <ProfilePic
                     first={this.state.first}
                     last={this.state.last}

@@ -24,15 +24,18 @@ export default class Registation extends React.Component {
         axios
             .post("/register", this.state)
             .then(response => {
-                console.log("Response from post register: ", response);
                 if (response.data.id == undefined) {
                     this.setState({
                         error:
                             "Oooops! Something went wrong... Please try again."
                     });
-                    console.log("this.state in submit error: ", this.state);
                 } else {
-                    location.replace("/");
+                    this.setState({ id: response.data.id });
+                    console.log(
+                        "this.state after db response: ",
+                        this.state.id
+                    );
+                    // location.replace("/app");
                 }
             })
             .catch(err => {

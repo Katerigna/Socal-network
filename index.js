@@ -78,12 +78,25 @@ app.post("/login", (req, res) => {
             .then(match => {
                 console.log("did password match? ", match);
                 req.session.userId = result[0].id;
-                res.json(result[0].id);
+                res.json(req.session.userId);
             })
             .catch(err => {
                 console.log("error on login", err);
             });
     });
+});
+
+app.get("/user", (req, res) => {
+    console.log("user req.", req.body, req.session.userId);
+
+    db.getUser(req.session.userId)
+        .then(result => {
+            console.log("result from getUser", result[0]);
+            res.json(result[0]);
+        })
+        .catch(err => {
+            console.log("error on getting user", err);
+        });
 });
 
 app.get("*", function(req, res) {

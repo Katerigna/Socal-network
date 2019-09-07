@@ -1,12 +1,9 @@
 const spicedPg = require("spiced-pg");
+const { dbuser, dbpass } = require("../secrets.json");
 
-let db;
-if (process.env.DATABASE_URL) {
-    db = spicedPg(process.env.DATABASE_URL);
-} else {
-    const { dbuser, dbpass } = require("../secrets.json");
-    db = spicedPg(`postgres:${dbuser}:${dbpass}@localhost:5432/users`);
-}
+const db = spicedPg(
+    `postgres:${dbuser}:${dbpass}@localhost:5432/social_network`
+);
 
 exports.addUser = function(first, last, email, password) {
     return db.query(
@@ -19,11 +16,19 @@ exports.addUser = function(first, last, email, password) {
 exports.getPassword = function(email) {
     return db
         .query(
-            `SELECT users.password AS password, users.id AS id
+            `SELECT password, id
             FROM users
             WHERE email=$1`,
             [email]
         )
+        .then(({ rows }) => {
+            return rows;
+        });
+};
+
+exports.getUser = function(id) {
+    return db
+        .query(`SELECT * FROM users WHERE id=$1`, [id])
         .then(({ rows }) => {
             return rows;
         });
