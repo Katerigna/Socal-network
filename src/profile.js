@@ -2,14 +2,29 @@ import React from "react";
 import ProfilePic from "./profilepic";
 import BioEditor from "./bioeditor";
 
-export default function Profile({ first, last, bio, image, id, setBio }) {
+export default function Profile({
+    first,
+    last,
+    bio,
+    imageurl,
+    toggleModal,
+    setBio
+}) {
     return (
         <div>
             <h1>
                 {first} {last}
             </h1>
-            <ProfilePic first={first} url={image} last={last} size="xl" />
-            <BioEditor bio={bio} setBio={setBio} />
+
+            <ProfilePic
+                first="first"
+                last="last"
+                imageurl={imageurl}
+                toggleModal={toggleModal}
+                alt={first && last}
+            />
+
+            {bio ? { bio } : <BioEditor setBio={setBio} />}
         </div>
     );
 }

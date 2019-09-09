@@ -4,6 +4,32 @@ const compression = require("compression");
 const csurf = require("csurf");
 const db = require("./utils/db");
 const { hash, compare } = require("./utils/bc");
+const s3 = require("./s3.js");
+const config = require("./config.json");
+
+//file upload boiler plate
+const multer = require("multer");
+const uidSafe = require("uid-safe");
+const path = require("path");
+
+const diskStorage = multer.diskStorage({
+    destination: function(req, file, callback) {
+        callback(null, __dirname + "/uploads");
+    },
+    filename: function(req, file, callback) {
+        uidSafe(24).then(function(uid) {
+            callback(null, uid + path.extname(file.originalname));
+        });
+    }
+});
+
+const uploader = multer({
+    storage: diskStorage,
+    limits: {
+        fileSize: 2097152 //ca. 2 MB
+    }
+});
+//end of upload boiler plate
 
 //compress
 app.use(compression());
@@ -52,15 +78,11 @@ app.get("/", (req, res) => {
 });
 
 app.post("/register", (req, res) => {
-    console.log("request from post register: ", req.body);
-
     hash(req.body.password).then(hash => {
         db.addUser(req.body.first, req.body.last, req.body.email, hash)
             .then(result => {
-                console.log("result from adding user to db: ", result.rows[0]);
                 res.json(result.rows[0]);
                 req.session.userId = result.rows[0].id;
-                console.log("registered cookie: ", req.session.userId);
             })
             .catch(err => {
                 console.log("error on adding user to db: ", err);
@@ -70,13 +92,9 @@ app.post("/register", (req, res) => {
 });
 
 app.post("/login", (req, res) => {
-    console.log("login request: ", req.body);
-
     db.getPassword(req.body.email).then(result => {
-        console.log("db response password", result);
         compare(req.body.password, result[0].password)
             .then(match => {
-                console.log("did password match? ", match);
                 req.session.userId = result[0].id;
                 res.json(req.session.userId);
             })
@@ -87,15 +105,36 @@ app.post("/login", (req, res) => {
 });
 
 app.get("/user", (req, res) => {
-    console.log("user req.", req.body, req.session.userId);
-
     db.getUser(req.session.userId)
         .then(result => {
-            console.log("result from getUser", result[0]);
             res.json(result[0]);
         })
         .catch(err => {
             console.log("error on getting user", err);
+        });
+});
+
+app.post("/upload", uploader.single("file"), s3.upload, (req, res) => {
+    const url = config.s3Url + req.file.filename;
+
+    db.addImage(url, req.session.userId).then(response => {
+        res.json(response[0]);
+    });
+});
+
+app.post("/bio", (req, res) => {
+    console.log(
+        "request to change bio of id",
+        req.body.bio,
+        req.session.userId
+    );
+
+    db.addBio(req.body.bio, req.session.userId)
+        .then(result => {
+            console.log("response from db add bio", result);
+        })
+        .catch(err => {
+            console.log("error on adding bio", err);
         });
 });
 

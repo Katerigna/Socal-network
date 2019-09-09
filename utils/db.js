@@ -33,3 +33,26 @@ exports.getUser = function(id) {
             return rows;
         });
 };
+
+exports.addImage = function(url, id) {
+    return db
+        .query(
+            `UPDATE users SET url=$1 WHERE id=$2 RETURNING id, first, last, url`,
+            [url, id]
+        )
+        .then(({ rows }) => {
+            return rows;
+        });
+};
+
+exports.addBio = function(bio, id) {
+    return db
+        .query(
+            `
+        UPDATE users SET bio=$1 WHERE id=$2 RETURNING bio, id`,
+            [bio, id]
+        )
+        .then(({ rows }) => {
+            return rows;
+        });
+};

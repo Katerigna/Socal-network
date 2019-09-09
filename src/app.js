@@ -3,6 +3,7 @@ import axios from "./axios";
 import ProfilePic from "./profilepic";
 import Uploader from "./uploader";
 import Profile from "./profile";
+import BioEditor from "./bioeditor";
 
 export class App extends React.Component {
     constructor(props) {
@@ -11,19 +12,20 @@ export class App extends React.Component {
             first: "",
             last: "",
             imageurl: "",
+            id: "",
+            bio: "",
             uploaderIsVisible: false
         };
-        this.showModal = this.showModal.bind(this);
+        this.toggleModal = this.toggleModal.bind(this);
+
+        this.setImage = this.setImage.bind(this);
     }
 
     componentDidMount() {
-        console.log("App mounted");
-
         //axios request to server to find user based on req.session.userId
         axios
             .get("/user")
             .then(response => {
-                console.log("response from userdata", response);
                 //add it to state using setState
                 this.setState({
                     first: response.data.first,
@@ -32,16 +34,34 @@ export class App extends React.Component {
                     id: response.data.id,
                     bio: response.data.bio
                 });
-                console.log("this.state", this.state);
             })
             .catch(err => {
                 console.log("error on get user", err);
             });
     }
 
-    showModal() {
+    toggleModal() {
+        if (this.state.uploaderIsVisible == true) {
+            this.setState({
+                uploaderIsVisible: false
+            });
+        } else {
+            this.setState({
+                uploaderIsVisible: true
+            });
+        }
+    }
+
+    setImage(profilepic) {
         this.setState({
-            uploaderIsVisible: true
+            imageurl: profilepic,
+            uploaderIsVisible: false
+        });
+    }
+
+    setBio(bio) {
+        this.setState({
+            bio: bio
         });
     }
 
@@ -53,21 +73,20 @@ export class App extends React.Component {
                     first={this.state.first}
                     last={this.state.last}
                     imageurl={this.state.imageurl}
-                    showModal={this.state.showModal}
+                    toggleModal={this.toggleModal}
                 />
                 <Profile
                     first={this.state.first}
-                    url={this.state.image}
                     last={this.state.last}
-                    showModal={() => {
-                        this.setState({ uploaderIsVisible: true });
-                    }}
+                    imageurl={this.state.imageurl}
+                    toggleModal={this.toggleModal}
                     bio={this.state.bio}
-                    setBio={bio => {}}
+                    setBio={this.setBio}
                 />
-                //this is the conditional rendering: is left hand side is true,
-                //it will show right hand side as well
-                {this.state.uploaderIsVisible && <Uploader />}
+
+                {this.state.uploaderIsVisible && (
+                    <Uploader setImage={this.setImage} />
+                )}
             </React.Fragment>
         );
     }
