@@ -19,6 +19,7 @@ export class App extends React.Component {
         this.toggleModal = this.toggleModal.bind(this);
 
         this.setImage = this.setImage.bind(this);
+        this.setBio = this.setBio.bind(this);
     }
 
     componentDidMount() {

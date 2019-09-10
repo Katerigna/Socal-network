@@ -131,7 +131,8 @@ app.post("/bio", (req, res) => {
 
     db.addBio(req.body.bio, req.session.userId)
         .then(result => {
-            console.log("response from db add bio", result);
+            console.log("response from db add bio", result[0]);
+            res.json(result[0]);
         })
         .catch(err => {
             console.log("error on adding bio", err);

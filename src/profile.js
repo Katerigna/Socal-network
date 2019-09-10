@@ -24,7 +24,7 @@ export default function Profile({
                 alt={first && last}
             />
 
-            {bio ? { bio } : <BioEditor setBio={setBio} />}
+            <BioEditor bio={bio} setBio={setBio} />
         </div>
     );
 }
