@@ -56,3 +56,11 @@ exports.addBio = function(bio, id) {
             return rows;
         });
 };
+
+exports.getProfile = function(id) {
+    return db
+        .query(`SELECT id, first, last, url, bio FROM users WHERE id=$1`, [id])
+        .then(({ rows }) => {
+            return rows;
+        });
+};

@@ -33,7 +33,7 @@ export default class Login extends React.Component {
                 } else {
                     this.setState({ id: response.data.id });
                     console.log("cookie to give", response.data);
-                    location.replace(`/app + ${response.data}`);
+                    location.replace(`/app`);
                 }
             })
             .catch(err => {

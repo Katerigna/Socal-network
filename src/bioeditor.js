@@ -13,14 +13,9 @@ export default class BioEditor extends React.Component {
     }
 
     handleChange(e) {
-        this.setState(
-            {
-                bio: e.target.value
-            },
-            () => {
-                console.log("this state in change bio", this.state.bio);
-            }
-        );
+        this.setState({
+            bio: e.target.value
+        });
     }
 
     handleSave(e) {
@@ -30,7 +25,6 @@ export default class BioEditor extends React.Component {
         axios
             .post("/bio", this.state)
             .then(response => {
-                console.log("response from bio request", response.data.bio);
                 this.props.setBio(response.data.bio);
                 this.setState({
                     isEditing: false

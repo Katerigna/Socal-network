@@ -35,7 +35,7 @@ export default class Registation extends React.Component {
                         "this.state after db response: ",
                         this.state.id
                     );
-                    // location.replace("/app");
+                    location.replace(`/app`);
                 }
             })
             .catch(err => {

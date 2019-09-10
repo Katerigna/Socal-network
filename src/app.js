@@ -3,7 +3,8 @@ import axios from "./axios";
 import ProfilePic from "./profilepic";
 import Uploader from "./uploader";
 import Profile from "./profile";
-import BioEditor from "./bioeditor";
+import { BrowserRouter, Route } from "react-router-dom";
+import OtherProfile from "./otherprofile";
 
 export class App extends React.Component {
     constructor(props) {
@@ -27,6 +28,7 @@ export class App extends React.Component {
         axios
             .get("/user")
             .then(response => {
+                console.log("response from axios when mounting", response);
                 //add it to state using setState
                 this.setState({
                     first: response.data.first,
@@ -35,6 +37,7 @@ export class App extends React.Component {
                     id: response.data.id,
                     bio: response.data.bio
                 });
+                console.log("App mounted with state: ", this.state);
             })
             .catch(err => {
                 console.log("error on get user", err);
@@ -70,20 +73,41 @@ export class App extends React.Component {
         return (
             <React.Fragment>
                 <img className="logo" width="100" height="100" src="logo.png" />
-                <ProfilePic
-                    first={this.state.first}
-                    last={this.state.last}
-                    imageurl={this.state.imageurl}
-                    toggleModal={this.toggleModal}
-                />
-                <Profile
-                    first={this.state.first}
-                    last={this.state.last}
-                    imageurl={this.state.imageurl}
-                    toggleModal={this.toggleModal}
-                    bio={this.state.bio}
-                    setBio={this.setBio}
-                />
+
+                <BrowserRouter>
+                    <ProfilePic
+                        first={this.state.first}
+                        last={this.state.last}
+                        imageurl={this.state.imageurl}
+                        toggleModal={this.toggleModal}
+                    />
+
+                    <Route
+                        exact
+                        path="/app"
+                        render={() => (
+                            <Profile
+                                first={this.state.first}
+                                last={this.state.last}
+                                imageurl={this.state.imageurl}
+                                toggleModal={this.toggleModal}
+                                bio={this.state.bio}
+                                setBio={this.setBio}
+                            />
+                        )}
+                    />
+
+                    <Route
+                        path="/user/:id"
+                        render={props => (
+                            <OtherProfile
+                                key={props.match.url}
+                                match={props.match}
+                                history={props.history}
+                            />
+                        )}
+                    />
+                </BrowserRouter>
 
                 {this.state.uploaderIsVisible && (
                     <Uploader setImage={this.setImage} />

@@ -81,8 +81,8 @@ app.post("/register", (req, res) => {
     hash(req.body.password).then(hash => {
         db.addUser(req.body.first, req.body.last, req.body.email, hash)
             .then(result => {
-                res.json(result.rows[0]);
                 req.session.userId = result.rows[0].id;
+                res.json(result.rows[0]);
             })
             .catch(err => {
                 console.log("error on adding user to db: ", err);
@@ -105,13 +105,31 @@ app.post("/login", (req, res) => {
 });
 
 app.get("/user", (req, res) => {
+    console.log("get user for: ", req.session.userId);
     db.getUser(req.session.userId)
         .then(result => {
+            console.log("result from get user", result);
             res.json(result[0]);
         })
         .catch(err => {
             console.log("error on getting user", err);
         });
+});
+
+app.get("/api/user/:id", (req, res) => {
+    console.log("request id from id", req.params.id, req.session.userId);
+    if (req.params.id != req.session.userId) {
+        db.getProfile(req.params.id)
+            .then(result => {
+                console.log("result from get other user", result);
+                res.json(result[0]);
+            })
+            .catch(err => {
+                console.log("error on getting other user", err);
+            });
+    } else {
+        res.json("own id!");
+    }
 });
 
 app.post("/upload", uploader.single("file"), s3.upload, (req, res) => {
