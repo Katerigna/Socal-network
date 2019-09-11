@@ -64,3 +64,31 @@ exports.getProfile = function(id) {
             return rows;
         });
 };
+
+exports.getLastUsers = function() {
+    return db
+        .query(
+            `
+        SELECT id, created_at, first, last, url, bio
+        FROM users
+        ORDER BY created_at DESC
+        LIMIT 3;
+        `
+        )
+        .then(({ rows }) => {
+            return rows;
+        });
+};
+
+exports.getSearchedUsers = function(name) {
+    return db
+        .query(
+            `SELECT id, first, last, url, bio
+            FROM users WHERE first || '' || last ILIKE $1
+        `,
+            [name + "%"]
+        )
+        .then(({ rows }) => {
+            return rows;
+        });
+};

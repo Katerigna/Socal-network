@@ -105,7 +105,6 @@ app.post("/login", (req, res) => {
 });
 
 app.get("/user", (req, res) => {
-    console.log("get user for: ", req.session.userId);
     db.getUser(req.session.userId)
         .then(result => {
             console.log("result from get user", result);
@@ -117,13 +116,10 @@ app.get("/user", (req, res) => {
 });
 
 app.get("/api/user/:id", (req, res) => {
-    console.log("request id from id", req.params.id, req.session.userId);
     if (req.params.id != req.session.userId) {
         db.getProfile(req.params.id)
             .then(result => {
-                console.log("result from get other user", result[0]);
                 if (result[0] == undefined) {
-                    console.log("user doesn't exist");
                     res.json("user doesn't exist");
                 }
                 res.json(result[0]);
@@ -145,12 +141,6 @@ app.post("/upload", uploader.single("file"), s3.upload, (req, res) => {
 });
 
 app.post("/bio", (req, res) => {
-    console.log(
-        "request to change bio of id",
-        req.body.bio,
-        req.session.userId
-    );
-
     db.addBio(req.body.bio, req.session.userId)
         .then(result => {
             console.log("response from db add bio", result[0]);
@@ -158,6 +148,29 @@ app.post("/bio", (req, res) => {
         })
         .catch(err => {
             console.log("error on adding bio", err);
+        });
+});
+
+app.get("/users.json/", (req, res) => {
+    db.getLastUsers()
+        .then(result => {
+            console.log("request for three last users: ", result);
+            res.json(result);
+        })
+        .catch(err => {
+            console.log("error on getting last users", err);
+        });
+});
+
+app.get("/search/:name", (req, res) => {
+    console.log("request from find user: ", req.params.name);
+    db.getSearchedUsers(req.params.name)
+        .then(result => {
+            console.log("searched users:", result);
+            res.json(result);
+        })
+        .catch(err => {
+            console.log("error on search users", err);
         });
 });
 

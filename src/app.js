@@ -3,8 +3,9 @@ import axios from "./axios";
 import ProfilePic from "./profilepic";
 import Uploader from "./uploader";
 import Profile from "./profile";
-import { BrowserRouter, Route } from "react-router-dom";
+import { BrowserRouter, Route, Link } from "react-router-dom";
 import OtherProfile from "./otherprofile";
+import FindPeople from "./findpeople";
 
 export class App extends React.Component {
     constructor(props) {
@@ -28,7 +29,6 @@ export class App extends React.Component {
         axios
             .get("/user")
             .then(response => {
-                console.log("response from axios when mounting", response);
                 //add it to state using setState
                 this.setState({
                     first: response.data.first,
@@ -37,7 +37,6 @@ export class App extends React.Component {
                     id: response.data.id,
                     bio: response.data.bio
                 });
-                console.log("App mounted with state: ", this.state);
             })
             .catch(err => {
                 console.log("error on get user", err);
@@ -81,6 +80,9 @@ export class App extends React.Component {
                         imageurl={this.state.imageurl}
                         toggleModal={this.toggleModal}
                     />
+
+                    <Link to="/users">Find People</Link>
+                    <Route path="/users" component={FindPeople} />
 
                     <Route
                         exact

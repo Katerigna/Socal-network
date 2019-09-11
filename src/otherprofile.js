@@ -14,7 +14,6 @@ export default function OtherProfile({ match, history }) {
         axios
             .get(`/api/user/` + id)
             .then(response => {
-                console.log("result success ", typeof response.data);
                 if (typeof response.data == "string") {
                     setError(response.data);
                     if (response.data == "own id!") {

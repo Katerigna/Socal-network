@@ -30,3 +30,9 @@ UPDATE is when button says accept, to change the BOOLEAN
 when unfriend is clicked you delete the row
 
 when button says cancel is also delete
+
+
+SELECT created_at, first, last, url, bio
+FROM users
+ORDER BY created_at DESC
+LIMIT 3;
