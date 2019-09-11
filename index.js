@@ -121,7 +121,11 @@ app.get("/api/user/:id", (req, res) => {
     if (req.params.id != req.session.userId) {
         db.getProfile(req.params.id)
             .then(result => {
-                console.log("result from get other user", result);
+                console.log("result from get other user", result[0]);
+                if (result[0] == undefined) {
+                    console.log("user doesn't exist");
+                    res.json("user doesn't exist");
+                }
                 res.json(result[0]);
             })
             .catch(err => {

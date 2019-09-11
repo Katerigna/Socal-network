@@ -8,13 +8,18 @@ export default function OtherProfile({ match, history }) {
     const [last, setLast] = useState("");
     const [imageurl, setImageurl] = useState("");
     const [bio, setBio] = useState("");
+    const [error, setError] = useState();
 
     useEffect(() => {
         axios
             .get(`/api/user/` + id)
             .then(response => {
-                if (response.data == "own id!") {
-                    history.push("/app");
+                console.log("result success ", typeof response.data);
+                if (typeof response.data == "string") {
+                    setError(response.data);
+                    if (response.data == "own id!") {
+                        history.push("/app");
+                    }
                 } else {
                     setFirst(response.data.first);
                     setLast(response.data.last);
@@ -29,6 +34,8 @@ export default function OtherProfile({ match, history }) {
 
     return (
         <div>
+            {error && <p>{error}</p>}
+
             <h1>
                 {first} {last}
             </h1>

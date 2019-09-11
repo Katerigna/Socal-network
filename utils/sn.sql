@@ -1,4 +1,5 @@
 DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS friendships;
 
 CREATE TABLE users(
     id SERIAL PRIMARY KEY,
@@ -10,3 +11,22 @@ CREATE TABLE users(
     bio VARCHAR(300),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE friendships(
+    id SERIAL PRIMARY KEY,
+    receiver_id INT NOT NULL REFERENCES users(id),
+    sender_id INT NOT NULL REFERENCES users(id),
+    accepted BOOLEAN DEFAULT FALSE
+);
+
+SELECT * FROM friendships
+WHERE (receiver_id = $1 AND sender_id = $2)
+OR (receiver_id = $2 AND sender_id = $1)
+
+INSERT when the button says send frined request
+
+UPDATE is when button says accept, to change the BOOLEAN
+
+when unfriend is clicked you delete the row
+
+when button says cancel is also delete
