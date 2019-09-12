@@ -5,19 +5,20 @@ import axios from "./axios";
 
 jest.mock("./axios");
 
-test("App shows nothing at first", async () => {
+test("App renders properly", async () => {
     axios.get.mockResolvedValue({
-        data: {
+        response: {
             id: 420,
             first: "funky",
             last: "chicken",
-            url: "/funchicken.png"
+            imageurl: "/funchicken.png",
+            bio: "Wife. Mom. Blogger"
         }
     });
 
     const { container } = render(<App />);
 
-    expect(container.children.length).toBe(0);
+    expect(container.children.length).toBe(3);
 
     console.log("container before: ", container.innerHTML);
 

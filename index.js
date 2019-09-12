@@ -174,6 +174,10 @@ app.get("/search/:name", (req, res) => {
         });
 });
 
+app.get("/friends/:id", (req, res) => {
+    console.log("request from friends button route", req.params.id);
+});
+
 app.get("*", function(req, res) {
     res.sendFile(__dirname + "/index.html");
 });

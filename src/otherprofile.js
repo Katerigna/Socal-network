@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "./axios";
+import FriendButton from "./friendbutton.js";
 
 export default function OtherProfile({ match, history }) {
     const id = match.params.id;
@@ -39,9 +40,11 @@ export default function OtherProfile({ match, history }) {
                 {first} {last}
             </h1>
 
-            <img width="150" height="150" src={imageurl} alt={first && last} />
+            <img height="200" src={imageurl} alt={first && last} />
 
             <p>{bio}</p>
+
+            <FriendButton id={id} />
         </div>
     );
 }

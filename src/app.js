@@ -7,7 +7,7 @@ import { BrowserRouter, Route, Link } from "react-router-dom";
 import OtherProfile from "./otherprofile";
 import FindPeople from "./findpeople";
 
-export class App extends React.Component {
+export default class App extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
