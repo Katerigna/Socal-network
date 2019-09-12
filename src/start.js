@@ -25,6 +25,7 @@ function App() {
             <HashRouter>
                 <div>
                     <Route exact path="/" component={HotOrNot} />
+                    <Route exact path="/hot" component={Hot} />
                 </div>
             </HashRouter>
         </div>

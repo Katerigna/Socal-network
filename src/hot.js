@@ -1,8 +1,26 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { receiveUsers, makeNot } from './actions';
+
 
 export default function Hot() {
-    const users = null;
+    const dispatch = useDispatch();
+    const users = useSelector(
+        state => state.users && state.users.filter(
+            user => user.hot
+        )
+    );
+
+    useEffect(
+        () => {
+            users || dispatch(
+                receiveUsers()
+            );
+        },
+        []
+    );
+
     if (!users) {
         return null;
     }
@@ -12,7 +30,13 @@ export default function Hot() {
                 <div className="user">
                     <img src={user.image} />
                     <div className="buttons">
-                        <button>Not</button>
+                        <button onClick={
+                            e => {
+                                dispatch(
+                                    makeNot(user.id)
+                                )
+                            }
+                        }>Not</button>
                     </div>
                 </div>
             ))}
