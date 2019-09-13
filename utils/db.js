@@ -92,3 +92,51 @@ exports.getSearchedUsers = function(name) {
             return rows;
         });
 };
+
+exports.getFriendStatus = function(receiver_id, sender_id) {
+    return db
+        .query(
+            `SELECT * FROM friendships
+        WHERE (receiver_id = $1 AND sender_id = $2)
+        OR (receiver_id = $2 AND sender_id = $1)`,
+            [receiver_id, sender_id]
+        )
+        .then(({ rows }) => {
+            return rows;
+        });
+};
+
+exports.addFriendRequest = function(receiver_id, sender_id) {
+    return db
+        .query(
+            `INSERT INTO friendships (receiver_id, sender_id) VALUES ($1, $2) RETURNING id`,
+            [receiver_id, sender_id]
+        )
+        .then(({ rows }) => {
+            return rows;
+        });
+};
+
+exports.addFriend = function(receiver_id, sender_id, status) {
+    return db
+        .query(
+            `UPDATE friendships SET accepted = $3 WHERE (receiver_id=$1 AND sender_id=$2)`,
+            [receiver_id, sender_id, status]
+        )
+        .then(({ rows }) => {
+            return rows;
+        });
+};
+
+exports.deleteFriendRequest = function(receiver_id, sender_id) {
+    return db
+        .query(
+            `DELETE FROM friendships
+        WHERE (receiver_id = $1 AND sender_id = $2)
+        OR (receiver_id = $2 AND sender_id = $1)`,
+            [receiver_id, sender_id]
+        )
+        .then(({ rows }) => {
+            return rows;
+        });
+};

@@ -107,7 +107,6 @@ app.post("/login", (req, res) => {
 app.get("/user", (req, res) => {
     db.getUser(req.session.userId)
         .then(result => {
-            console.log("result from get user", result);
             res.json(result[0]);
         })
         .catch(err => {
@@ -143,7 +142,6 @@ app.post("/upload", uploader.single("file"), s3.upload, (req, res) => {
 app.post("/bio", (req, res) => {
     db.addBio(req.body.bio, req.session.userId)
         .then(result => {
-            console.log("response from db add bio", result[0]);
             res.json(result[0]);
         })
         .catch(err => {
@@ -154,7 +152,6 @@ app.post("/bio", (req, res) => {
 app.get("/users.json/", (req, res) => {
     db.getLastUsers()
         .then(result => {
-            console.log("request for three last users: ", result);
             res.json(result);
         })
         .catch(err => {
@@ -163,10 +160,8 @@ app.get("/users.json/", (req, res) => {
 });
 
 app.get("/search/:name", (req, res) => {
-    console.log("request from find user: ", req.params.name);
     db.getSearchedUsers(req.params.name)
         .then(result => {
-            console.log("searched users:", result);
             res.json(result);
         })
         .catch(err => {
@@ -175,7 +170,86 @@ app.get("/search/:name", (req, res) => {
 });
 
 app.get("/friends/:id", (req, res) => {
-    console.log("request from friends button route", req.params.id);
+    // console.log("receiver_id", req.session.userId);
+    // console.log("sender_id", req.params.id);
+
+    db.getFriendStatus(req.session.userId, req.params.id)
+        .then(result => {
+            console.log("who's friends?", result);
+            if (result[0]) {
+                if (result[0].accepted == true) {
+                    res.json("Friend detected");
+                }
+                if (
+                    result[0].accepted == false &&
+                    result[0].receiver_id == req.session.userId
+                ) {
+                    res.json("Outgoing friend request detected");
+                }
+                if (
+                    result[0].accepted == false &&
+                    result[0].receiver_id == req.params.id
+                ) {
+                    res.json("Incoming friend request detected");
+                }
+            } else {
+                res.json("Total strangers");
+            }
+        })
+        .catch(err => {
+            console.log("error on who's friends", err);
+        });
+});
+
+app.post("/friends/add/:id", (req, res) => {
+    db.addFriendRequest(req.session.userId, req.params.id)
+        .then(result => {
+            // console.log("adding friend request", result[0]);
+            res.json("Friend request added");
+        })
+        .catch(err => {
+            console.log("error on adding friend request", err);
+        });
+});
+
+app.post("/friends/add/friend/:id", (req, res) => {
+    db.addFriend(req.session.userId, req.params.id, "true")
+        .then(result => {
+            console.log("adding friend", result);
+            res.json("Friend detected");
+        })
+        .catch(err => {
+            console.log("error on adding friend request", err);
+        });
+});
+
+app.post("/friends/delete/:id", (req, res) => {
+    db.deleteFriendRequest(req.session.userId, req.params.id)
+        .then(result => {
+            console.log("deleting friend request", result);
+            res.json("Friend request deleted");
+        })
+        .catch(err => {
+            console.log("error on deleting friend request", err);
+        });
+});
+
+app.get("/cute-animals.json", (req, res) => {
+    // console.log("get cute an runs");
+    res.json([
+        {
+            name: "wombat",
+            cuteness: "super"
+        },
+        {
+            name: "giraffe",
+            cuteness: "extremely"
+        },
+        {
+            name: "mouse",
+            cuteness: "extraordinary"
+        }
+    ]);
 });
 
 app.get("*", function(req, res) {
