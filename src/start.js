@@ -1,16 +1,26 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Hello from './hello';
+import Welcome from './welcome';
+import App from './app';
+
+import {Provider} from 'react-redux';
+import { createStore, applyMiddleware } from 'redux';
+import reduxPromise from 'redux-promise';
+import { composeWithDevTools } from 'redux-devtools-extension';
+import reducer from './reducer';
+
+const store = createStore(reducer, composeWithDevTools(applyMiddleware(reduxPromise)));
+
 let elem;
 if (location.pathname === '/welcome') {
-    elem = <Hello />;
-    // if user is on /welcome route, that means user is NOT logged in
-    // and we should render the Registration component.
+    elem = <Welcome />;
 } else {
-    elem = <p>my logooooooooooooo</p>;
-    // if else runs, that means user IS logged in. For now we will just render an img
+    elem = (
+        <Provider store={store}>
+            <App />
+        </Provider>
+    );
 }
-// elem = location.pathname === '/welcome' ? <Hello /> : <p>aksjda</p>
 ReactDOM.render(
     elem,
     document.querySelector('main')
