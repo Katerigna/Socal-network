@@ -6,6 +6,8 @@ const db = require("./utils/db");
 const { hash, compare } = require("./utils/bc");
 const s3 = require("./s3.js");
 const config = require("./config.json");
+const server = require("http").Server(app); //socket.io server
+const io = require("socket.io")(server, { origins: "localhost:8080" }); //space separated list of origins we allow socket.io to use //myapp.heroku.com/*
 
 //file upload boiler plate
 const multer = require("multer");
@@ -216,14 +218,14 @@ app.post("/friends/add/friend/:id", (req, res) => {
     db.addFriend(req.session.userId, req.params.id, "true")
         .then(result => {
             console.log("adding friend", result);
-            res.json("Friend detected");
+            res.json("Friend detected" + result);
         })
         .catch(err => {
             console.log("error on adding friend request", err);
         });
 });
 
-app.post("/friends/delete/:id", (req, res) => {
+app.post("/friends/delete/friend/:id", (req, res) => {
     db.deleteFriendRequest(req.session.userId, req.params.id)
         .then(result => {
             console.log("deleting friend request", result);
@@ -234,22 +236,17 @@ app.post("/friends/delete/:id", (req, res) => {
         });
 });
 
-app.get("/cute-animals.json", (req, res) => {
-    // console.log("get cute an runs");
-    res.json([
-        {
-            name: "wombat",
-            cuteness: "super"
-        },
-        {
-            name: "giraffe",
-            cuteness: "extremely"
-        },
-        {
-            name: "mouse",
-            cuteness: "extraordinary"
-        }
-    ]);
+app.get("/friends-wannabes", (req, res) => {
+    console.log("receiver_id", req.session.userId);
+
+    db.getFriendsWannabes(req.session.userId)
+        .then(result => {
+            console.log("friends and wannabes", result);
+            res.json(result);
+        })
+        .catch(err => {
+            console.log("error on getting friends and wannabes", err);
+        });
 });
 
 app.get("*", function(req, res) {
@@ -257,6 +254,20 @@ app.get("*", function(req, res) {
 });
 
 //server
-app.listen(8080, function() {
+server.listen(8080, function() {
     console.log("I'm listening.");
+});
+
+io.on("connection", socket => {
+    console.log(`A socket with id ${socket.io} just connected`);
+    socket.on("disconnect", () => {
+        console.log(`A socket with id ${socket.io} just disconnected`);
+    });
+
+    socket.emit("hi", {
+        msg: "hello there"
+    });
+
+    //that is how you send a message to a certain user (find them by id)
+    //io.sockets.sockets['ghaufo4lu8ri'].emit('ghaufo4lu8ri');
 });

@@ -84,7 +84,7 @@ exports.getSearchedUsers = function(name) {
     return db
         .query(
             `SELECT id, first, last, url, bio
-            FROM users WHERE first || '' || last ILIKE $1
+            FROM users WHERE first ILIKE $1 OR last ILIKE $1
         `,
             [name + "%"]
         )
@@ -117,13 +117,15 @@ exports.addFriendRequest = function(receiver_id, sender_id) {
         });
 };
 
-exports.addFriend = function(receiver_id, sender_id, status) {
+exports.addFriend = function(receiver_id, sender_id) {
+    console.log("db on addFiend", receiver_id, sender_id);
     return db
         .query(
-            `UPDATE friendships SET accepted = $3 WHERE (receiver_id=$1 AND sender_id=$2)`,
-            [receiver_id, sender_id, status]
+            `UPDATE friendships SET accepted=TRUE WHERE (receiver_id = $1 AND sender_id = $2) OR (receiver_id = $2 AND sender_id = $1) RETURNING id`,
+            [receiver_id, sender_id]
         )
         .then(({ rows }) => {
+            console.log("rows", rows);
             return rows;
         });
 };
@@ -135,6 +137,22 @@ exports.deleteFriendRequest = function(receiver_id, sender_id) {
         WHERE (receiver_id = $1 AND sender_id = $2)
         OR (receiver_id = $2 AND sender_id = $1)`,
             [receiver_id, sender_id]
+        )
+        .then(({ rows }) => {
+            return rows;
+        });
+};
+
+exports.getFriendsWannabes = function(receiver_id) {
+    return db
+        .query(
+            `SELECT users.id, first, last, url, accepted
+    FROM friendships
+    JOIN users
+    ON (accepted = false AND receiver_id = $1 AND sender_id = users.id)
+    OR (accepted = true AND receiver_id = $1 AND sender_id = users.id)
+    OR (accepted = true AND receiver_id = $1 AND receiver_id = users.id)`,
+            [receiver_id]
         )
         .then(({ rows }) => {
             return rows;

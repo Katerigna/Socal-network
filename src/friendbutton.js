@@ -69,7 +69,7 @@ export default function FriendButton({ id }) {
                 console.log("db response on addfriend", response.data);
                 setFriendStatus("Unfriend");
             })
-            .then(err =>
+            .catch(err =>
                 console.log("error on adding friend request to db", err)
             );
     }

@@ -6,7 +6,7 @@ import Profile from "./profile";
 import { BrowserRouter, Route, Link } from "react-router-dom";
 import OtherProfile from "./otherprofile";
 import FindPeople from "./findpeople";
-import CuteAnimals from "./cuteanimals";
+import Friends from "./friends";
 
 export default class App extends React.Component {
     constructor(props) {
@@ -111,7 +111,7 @@ export default class App extends React.Component {
                         )}
                     />
 
-                    <CuteAnimals />
+                    <Friends />
                 </BrowserRouter>
 
                 {this.state.uploaderIsVisible && (
