@@ -36,15 +36,20 @@ export default function FindPeople() {
         <div>
             {heading && <h2>Look who has joined us recently!</h2>}
 
-            <ul>
+            <ul className="find-people-container">
                 {recentUsers.map(recentUser => (
                     <li key={recentUser.id}>
+                        <img
+                            src={recentUser.url}
+                            alt="first"
+                            className="userpic"
+                        />
                         <p>
                             <Link to={"/user/" + recentUser.id}>
                                 {recentUser.first} {recentUser.last}
                             </Link>
                         </p>
-                        <img src={recentUser.url} height="200" alt="first" />
+
                         <p>{recentUser.bio}</p>
                     </li>
                 ))}

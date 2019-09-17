@@ -7,6 +7,7 @@ import { BrowserRouter, Route, Link } from "react-router-dom";
 import OtherProfile from "./otherprofile";
 import FindPeople from "./findpeople";
 import Friends from "./friends";
+import Chat from "./chat";
 
 export default class App extends React.Component {
     constructor(props) {
@@ -72,18 +73,36 @@ export default class App extends React.Component {
     render() {
         return (
             <React.Fragment>
-                <img className="logo" width="100" height="100" src="logo.png" />
-
                 <BrowserRouter>
-                    <ProfilePic
-                        first={this.state.first}
-                        last={this.state.last}
-                        imageurl={this.state.imageurl}
-                        toggleModal={this.toggleModal}
-                    />
+                    <header className="header">
+                        <Link to="/app" className="logo">
+                            <img
+                                className="logo"
+                                width="150"
+                                height="150"
+                                src="logo.png"
+                            />
+                        </Link>
 
-                    <Link to="/users">Find People</Link>
-                    <Route path="/users" component={FindPeople} />
+                        <Link to="/users" className="link">
+                            Find People
+                        </Link>
+
+                        <Link to="/friendships" className="link">
+                            Friends
+                        </Link>
+
+                        <Link to="/chat" className="link">
+                            Chat
+                        </Link>
+
+                        <ProfilePic
+                            first={this.state.first}
+                            last={this.state.last}
+                            imageurl={this.state.imageurl}
+                            toggleModal={this.toggleModal}
+                        />
+                    </header>
 
                     <Route
                         exact
@@ -111,7 +130,9 @@ export default class App extends React.Component {
                         )}
                     />
 
-                    <Friends />
+                    <Route path="/users" component={FindPeople} />
+                    <Route exact path="/friendships" component={Friends} />
+                    <Route exact path="/chat" component={Chat} />
                 </BrowserRouter>
 
                 {this.state.uploaderIsVisible && (

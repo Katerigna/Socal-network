@@ -4,7 +4,7 @@ import { getFriendsWannabes, unfriend, acceptFriends } from "./actions";
 
 export default function Friends() {
     const dispatch = useDispatch();
-    const friendsWannabes = useSelector(state => state.friendsWannabes);
+    // const friendsWannabes = useSelector(state => state.friendsWannabes);
     const friends = useSelector(
         state =>
             state.friendsWannabes &&
@@ -29,43 +29,51 @@ export default function Friends() {
         <div>
             <h1>Friends and Wannabes</h1>
 
-            {friendsWannabes &&
-                friendsWannabes.map((friendWannabe, index) => {
-                    return (
-                        <div key={index}>
-                            <img height="100" src={friendWannabe.url} />
-                            <p>{friendWannabe.first}</p>
-                        </div>
-                    );
-                })}
-
             <h2>Friends</h2>
 
-            {friends &&
-                friends.map((friend, index) => {
-                    return (
-                        <div key={index}>
-                            <img height="100" src={friend.url} />
-                            <p>
-                                {friend.first} {friend.last}
-                            </p>
-                            <button
-                                onClick={e => {
-                                    dispatch(unfriend(friend.id));
-                                }}
-                            >
-                                Let's change it!
-                            </button>
-                        </div>
-                    );
-                })}
+            <div className="friends-container">
+                {friends &&
+                    friends.map((friend, index) => {
+                        return (
+                            <div key={index}>
+                                <img src={friend.url} className="userpic" />
+                                <p>
+                                    {friend.first} {friend.last}
+                                </p>
+                                <button
+                                    onClick={e => {
+                                        dispatch(unfriend(friend.id));
+                                    }}
+                                >
+                                    Unfriend
+                                </button>
+                            </div>
+                        );
+                    })}
+            </div>
 
             <h2>Wannabes</h2>
 
-            {wannabes &&
-                wannabes.map((wannabe, index) => {
-                    return <p key={index}>{wannabe.first}</p>;
-                })}
+            <div className="wannabes-container">
+                {wannabes &&
+                    wannabes.map((wannabe, index) => {
+                        return (
+                            <div key={index}>
+                                <img src={wannabe.url} className="userpic" />
+                                <p>
+                                    {wannabe.first} {wannabe.last}
+                                </p>
+                                <button
+                                    onClick={e => {
+                                        dispatch(acceptFriends(wannabe.id));
+                                    }}
+                                >
+                                    Accept request
+                                </button>
+                            </div>
+                        );
+                    })}
+            </div>
         </div>
     );
 }

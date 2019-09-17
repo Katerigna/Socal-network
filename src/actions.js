@@ -18,7 +18,7 @@ export async function getFriendsWannabes() {
 }
 
 export async function acceptFriends(id) {
-    await axios.post(`/friends/add/friend/${id}`);
+    await axios.post(`/friends/add/${id}`);
     return {
         type: "ACCEPT_FRIENDS",
         id
@@ -32,4 +32,8 @@ export async function unfriend(id) {
         type: "UNFRIEND",
         id
     };
+}
+
+export async function chatMessages() {
+    console.log("chat made it to actions");
 }

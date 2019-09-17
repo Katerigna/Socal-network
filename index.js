@@ -43,15 +43,30 @@ app.use(express.json());
 app.use(express.static("./public"));
 
 //cookies
-app.use(
-    require("cookie-session")({
-        maxAge: 1000 * 60 * 60 * 24 * 385.25 * 1000,
-        secret:
-            process.env.NODE_ENV == "production"
-                ? process.env.SESS_SECRET
-                : require("./secrets.json").sessionSecret
-    })
-);
+// app.use(
+//     require("cookie-session")({
+//         maxAge: 1000 * 60 * 60 * 24 * 385.25 * 1000,
+//         secret:
+//             process.env.NODE_ENV == "production"
+//                 ? process.env.SESS_SECRET
+//                 : require("./secrets.json").sessionSecret
+//     })
+// );
+
+const cookieSession = require("cookie-session");
+const cookieSessionMiddleware = cookieSession({
+    secret:
+        process.env.NODE_ENV == "production"
+            ? process.env.SESS_SECRET
+            : require("./secrets.json").sessionSecret,
+    maxAge: 1000 * 60 * 60 * 24 * 90
+});
+
+app.use(cookieSessionMiddleware);
+
+io.use(function(socket, next) {
+    cookieSessionMiddleware(socket.request, socket.request.res, next);
+});
 
 //security
 app.use(csurf());
@@ -184,13 +199,13 @@ app.get("/friends/:id", (req, res) => {
                 }
                 if (
                     result[0].accepted == false &&
-                    result[0].receiver_id == req.session.userId
+                    result[0].receiver_id == req.params.id
                 ) {
                     res.json("Outgoing friend request detected");
                 }
                 if (
                     result[0].accepted == false &&
-                    result[0].receiver_id == req.params.id
+                    result[0].receiver_id == req.session.userId
                 ) {
                     res.json("Incoming friend request detected");
                 }
@@ -203,10 +218,10 @@ app.get("/friends/:id", (req, res) => {
         });
 });
 
-app.post("/friends/add/:id", (req, res) => {
-    db.addFriendRequest(req.session.userId, req.params.id)
+app.post("/friends/addrequest/:id", (req, res) => {
+    db.addFriendRequest(req.params.id, req.session.userId)
         .then(result => {
-            // console.log("adding friend request", result[0]);
+            console.log("adding friend request", result);
             res.json("Friend request added");
         })
         .catch(err => {
@@ -214,11 +229,11 @@ app.post("/friends/add/:id", (req, res) => {
         });
 });
 
-app.post("/friends/add/friend/:id", (req, res) => {
-    db.addFriend(req.session.userId, req.params.id, "true")
+app.post("/friends/add/:id", (req, res) => {
+    db.addFriend(req.session.userId, req.params.id)
         .then(result => {
             console.log("adding friend", result);
-            res.json("Friend detected" + result);
+            res.json("Friend detected");
         })
         .catch(err => {
             console.log("error on adding friend request", err);
@@ -242,7 +257,12 @@ app.get("/friends-wannabes", (req, res) => {
     db.getFriendsWannabes(req.session.userId)
         .then(result => {
             console.log("friends and wannabes", result);
-            res.json(result);
+            let filteredResult = result.filter(user => {
+                if (req.session.userId != user.id) {
+                    return user;
+                }
+            });
+            res.json(filteredResult);
         })
         .catch(err => {
             console.log("error on getting friends and wannabes", err);
@@ -250,6 +270,7 @@ app.get("/friends-wannabes", (req, res) => {
 });
 
 app.get("*", function(req, res) {
+    console.log("user id", req.session.userId);
     res.sendFile(__dirname + "/index.html");
 });
 
@@ -258,16 +279,26 @@ server.listen(8080, function() {
     console.log("I'm listening.");
 });
 
-io.on("connection", socket => {
+io.on("connection", function(socket) {
     console.log(`A socket with id ${socket.io} just connected`);
-    socket.on("disconnect", () => {
-        console.log(`A socket with id ${socket.io} just disconnected`);
+    if (!socket.request.session.userId) {
+        return socket.disconnect(true);
+    }
+
+    const userId = socket.request.session.userId;
+
+    socket.on("My chat message", msg => {
+        console.log("Message received", msg);
+        io.socket.emit("Message from server", msg);
     });
 
-    socket.emit("hi", {
-        msg: "hello there"
-    });
-
-    //that is how you send a message to a certain user (find them by id)
-    //io.sockets.sockets['ghaufo4lu8ri'].emit('ghaufo4lu8ri');
+    //db query to get last 10 chat messages
+    //and the result is sent to chat:
+    //io.sockets.emit(chatMessages, [array of chat messages]);
+    //socket.on("new message", () => {
+    //go and get all the info about the user db query and pass a user id to be stored in a variable (or just pass it)
+    //add chat message to db //
+    //could create a chat message object and send it Out
+    //io.sockets.emit('new chat message')
+    // })
 });

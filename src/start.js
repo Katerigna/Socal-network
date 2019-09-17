@@ -2,9 +2,10 @@ import React from "react";
 import ReactDOM from "react-dom";
 import Welcome from "./welcome";
 import App from "./app";
-import * as io from "socket.io-client";
 
-const socket = io.connect();
+import init from "./socket";
+
+// const socket = io.connect();
 
 //redux
 import { Provider } from "react-redux";
@@ -23,6 +24,7 @@ let elem;
 if (location.pathname === "/welcome") {
     elem = <Welcome />;
 } else {
+    init(store);
     elem = (
         <Provider store={store}>
             <App />
@@ -30,12 +32,12 @@ if (location.pathname === "/welcome") {
     );
 }
 
-socket.on("welcome", function(data) {
-    console.log(data);
-    socket.emit("thanks", {
-        message: "Thank you. It is great to be here."
-    });
-});
+// socket.on("welcome", function(data) {
+//     console.log(data);
+//     socket.emit("thanks", {
+//         message: "Thank you. It is great to be here."
+//     });
+// });
 
 ReactDOM.render(
     elem, //JSX element

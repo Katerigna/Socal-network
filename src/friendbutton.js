@@ -44,7 +44,7 @@ export default function FriendButton({ id }) {
 
     function addFriendRequest() {
         axios
-            .post("/friends/add/" + id)
+            .post("/friends/addrequest/" + id)
             .then(response => {
                 console.log("db response on POST /friends/add", response.data);
                 setFriendStatus("Cancel Request");
@@ -56,7 +56,7 @@ export default function FriendButton({ id }) {
 
     function deleteFriendRequest() {
         // console.log("I don#t wanna your friendship!");
-        axios.post("/friends/delete/" + id).then(response => {
+        axios.post("/friends/delete/friend/" + id).then(response => {
             console.log("response on deleting friend request", response.data);
             setFriendStatus("Add Friend");
         });
@@ -64,14 +64,12 @@ export default function FriendButton({ id }) {
 
     function addFriend() {
         axios
-            .post("/friends/add/friend/" + id)
+            .post("/friends/add/" + id)
             .then(response => {
                 console.log("db response on addfriend", response.data);
                 setFriendStatus("Unfriend");
             })
-            .catch(err =>
-                console.log("error on adding friend request to db", err)
-            );
+            .catch(err => console.log("error on adding friend to db", err));
     }
 
     return (

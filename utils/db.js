@@ -121,7 +121,7 @@ exports.addFriend = function(receiver_id, sender_id) {
     console.log("db on addFiend", receiver_id, sender_id);
     return db
         .query(
-            `UPDATE friendships SET accepted=TRUE WHERE (receiver_id = $1 AND sender_id = $2) OR (receiver_id = $2 AND sender_id = $1) RETURNING id`,
+            `UPDATE friendships SET accepted=TRUE WHERE (receiver_id = $1 AND sender_id = $2) OR (receiver_id = $2 AND sender_id = $1) RETURNING id, receiver_id, sender_id`,
             [receiver_id, sender_id]
         )
         .then(({ rows }) => {
@@ -146,7 +146,7 @@ exports.deleteFriendRequest = function(receiver_id, sender_id) {
 exports.getFriendsWannabes = function(receiver_id) {
     return db
         .query(
-            `SELECT users.id, first, last, url, accepted
+            `SELECT users.id, users.first, users.last, users.url, friendships.accepted, friendships.sender_id, friendships.receiver_id
     FROM friendships
     JOIN users
     ON (accepted = false AND receiver_id = $1 AND sender_id = users.id)
