@@ -34,6 +34,18 @@ export default function reducer(state = {}, action) {
             })
         };
     }
+    if (action.type === "GET_MESSAGES") {
+        state = {
+            ...state,
+            chatMessages: action.chatMessages
+        };
+    }
+    if (action.type === "ADD_MESSAGE") {
+        state = {
+            ...state,
+            chatMessages: state.chatMessages.concat(action.msg)
+        };
+    }
 
     return state;
 }

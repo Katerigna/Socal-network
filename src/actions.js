@@ -1,11 +1,5 @@
 import axios from "./axios";
-
-export function example() {
-    //this object in return is the action
-    return {
-        type: "ACTION_TO CHANGE" //every action needs corresponding if-statement in the reducer
-    };
-}
+import { socket } from "./socket";
 
 export async function getFriendsWannabes() {
     const { data } = await axios.get("/friends-wannabes");
@@ -34,6 +28,20 @@ export async function unfriend(id) {
     };
 }
 
-export async function chatMessages() {
-    console.log("chat made it to actions");
+export async function getChatMessages(data) {
+    await socket.on("Last 10 messages", data);
+
+    return {
+        type: "GET_MESSAGES",
+        chatMessages: data
+    };
+}
+
+export async function addMessage(msg) {
+    await socket.on("My chat message", msg);
+    console.log("My chat message", msg);
+    return {
+        type: "ADD_MESSAGE",
+        msg
+    };
 }

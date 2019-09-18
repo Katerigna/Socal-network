@@ -44,13 +44,18 @@ export default function FindPeople() {
                             alt="first"
                             className="userpic"
                         />
-                        <p>
-                            <Link to={"/user/" + recentUser.id}>
-                                {recentUser.first} {recentUser.last}
-                            </Link>
-                        </p>
+                        <div className="user-info">
+                            <p>
+                                <Link
+                                    to={"/user/" + recentUser.id}
+                                    className="user-link"
+                                >
+                                    {recentUser.first} {recentUser.last}
+                                </Link>
+                            </p>
 
-                        <p>{recentUser.bio}</p>
+                            <p>{recentUser.bio}</p>
+                        </div>
                     </li>
                 ))}
             </ul>

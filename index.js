@@ -279,17 +279,45 @@ server.listen(8080, function() {
     console.log("I'm listening.");
 });
 
+const onlineUsers = {};
+
 io.on("connection", function(socket) {
-    console.log(`A socket with id ${socket.io} just connected`);
+    console.log(`A socket with id ${socket.id} just connected`);
     if (!socket.request.session.userId) {
         return socket.disconnect(true);
     }
+    db.getChatMessages().then(result => {
+        console.log("last 10 msg from db", result);
+        io.emit("Last 10 messages", result);
+    });
 
     const userId = socket.request.session.userId;
 
+    onlineUsers[socket.id] = socket.request.session.userId; //for online list
+
+    // socket.on("Last 10 messages", () => {
+    //     db.getChatMessages().then(result => {
+    //         console.log("last 10 msg from db", result);
+    //         io.sockets.emit("Last 10 messages", result);
+    //     });
+    // });
+
     socket.on("My chat message", msg => {
         console.log("Message received", msg);
-        io.socket.emit("Message from server", msg);
+        db.addMessage(msg, userId)
+            .then(result => {
+                console.log(
+                    "result from inserting new chat message into db",
+                    result
+                );
+                io.sockets.emit("My chat message", result);
+            })
+            .catch(err => console.log("error on adding msg to db", err));
+    });
+
+    socket.on("disconnect", () => {
+        delete onlineUsers[socket.id];
+        console.log(`A socket with id ${socket.id} just disconnected`);
     });
 
     //db query to get last 10 chat messages

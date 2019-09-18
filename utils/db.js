@@ -158,3 +158,27 @@ exports.getFriendsWannabes = function(receiver_id) {
             return rows;
         });
 };
+
+exports.getChatMessages = function() {
+    return db
+        .query(
+            `SELECT users.id, users.first, users.last, users.url, messages.id, messages.sender_id, messages.message, messages.posted_at
+        FROM messages
+        JOIN users
+        ON sender_id = users.id ORDER BY posted_at DESC LIMIT 10;`
+        )
+        .then(({ rows }) => {
+            return rows;
+        });
+};
+
+exports.addMessage = function(msg, sender_id) {
+    return db
+        .query(
+            `INSERT INTO messages (message, sender_id) VALUES ($1, $2) RETURNING *`,
+            [msg, sender_id]
+        )
+        .then(({ rows }) => {
+            return rows;
+        });
+};

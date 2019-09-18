@@ -4,7 +4,7 @@ import { getFriendsWannabes, unfriend, acceptFriends } from "./actions";
 
 export default function Friends() {
     const dispatch = useDispatch();
-    // const friendsWannabes = useSelector(state => state.friendsWannabes);
+
     const friends = useSelector(
         state =>
             state.friendsWannabes &&

@@ -67,7 +67,7 @@ header .link:hover {
 }
 
 .userpic {
-    height: 150px;
+    max-height: 150px;
     max-height: 200px;
     border-radius: 20px;
 }
@@ -79,11 +79,19 @@ header .link:hover {
 
 .find-people-container li {
     display: flex;
-    margin: 50px;
+    margin: 20px;
 }
 
 .find-people-container p {
     width: 100%;
+}
+
+.user-link {
+    text-decoration: none;
+}
+
+.user-link {
+    display: flex;
 }
 
 .friends-container,
@@ -125,4 +133,22 @@ header .link:hover {
 .chat-input::placeholder {
     color: #29538d;
     font-size: 20px;
+}
+
+@media (min-width: 576px) {
+    .find-people-container {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .find-people-container li,
+    .friends-container,
+    .wannabes-container {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .userpic {
+        width: 180px;
+    }
 }
