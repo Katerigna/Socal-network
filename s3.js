@@ -40,4 +40,26 @@ exports.upload = function(req, res, next) {
         });
 };
 
-//
+exports.delete = function(id) {
+    let filesToDelete = function() {
+        s3.listObjectsV2(
+            {
+                Bucket: "spicedling",
+                Prefix: "katsia" + id
+            },
+            data => {
+                return data;
+            }
+        );
+    };
+
+    s3.deleteObject(
+        {
+            Bucket: "spicedling",
+            Key: filesToDelete
+        },
+        function(err, data) {
+            console.log(data);
+        }
+    );
+};

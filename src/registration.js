@@ -48,7 +48,7 @@ export default class Registation extends React.Component {
             <div>
                 <h2>Please register</h2>
 
-                <h3>{this.state.error}</h3>
+                <h3 className="error">{this.state.error}</h3>
 
                 <form onSubmit={this.handleSubmit} className="form-wrap">
                     <label htmlFor="first" />

@@ -182,3 +182,7 @@ exports.addMessage = function(msg, sender_id) {
             return rows;
         });
 };
+
+exports.deleteUser = function(id) {
+    return db.query(`DELETE FROM users WHERE id = $1`, [id]);
+};

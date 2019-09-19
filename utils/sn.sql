@@ -1,6 +1,6 @@
-DROP TABLE IF EXISTS users;
-DROP TABLE IF EXISTS friendships;
-DROP TABLE IF EXISTS messages;
+DROP TABLE IF EXISTS users CASCADE;
+DROP TABLE IF EXISTS friendships CASCADE;
+DROP TABLE IF EXISTS messages CASCADE;
 
 CREATE TABLE users(
     id SERIAL PRIMARY KEY,
@@ -15,14 +15,14 @@ CREATE TABLE users(
 
 CREATE TABLE friendships(
     id SERIAL PRIMARY KEY,
-    receiver_id INT NOT NULL REFERENCES users(id),
-    sender_id INT NOT NULL REFERENCES users(id),
+    receiver_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    sender_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     accepted BOOLEAN DEFAULT FALSE
 );
 
 CREATE TABLE messages(
     id SERIAL PRIMARY KEY,
-    sender_id INT NOT NULL REFERENCES users(id),
+    sender_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     message VARCHAR(900),
     posted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -77,6 +77,7 @@ SELECT
 FROM shuffled s;
 ​
 DELETE FROM friendships WHERE sender_id = receiver_id;
+DELETE * FROM users WHERE id = $1
 ​
 SELECT * FROM friendships ORDER BY sender_id ASC;
 

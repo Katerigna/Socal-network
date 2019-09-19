@@ -111,7 +111,7 @@ header .link:hover {
     align-items: center;
 }
 
-.chat-messages {
+.chat-messages-list {
     border: 1px solid #93b8d3;
     border-radius: 5px;
     background-color: rgba(255, 255, 255, 0.1);
@@ -119,6 +119,16 @@ header .link:hover {
     width: 600px;
     overflow-y: scroll;
     margin-bottom: 20px;
+}
+
+.chat-message-item {
+    display: flex;
+}
+
+.chat-message-sender {
+    display: inline-block;
+    margin: auto 5px;
+    font-style: italic;
 }
 
 .chat-input {
@@ -130,9 +140,23 @@ header .link:hover {
     font-size: 20px;
 }
 
+.chat-message-item p:last-child {
+    display: inline-block;
+    margin: auto 10px;
+}
+
 .chat-input::placeholder {
     color: #29538d;
     font-size: 20px;
+}
+
+.logout-button {
+    height: 20px;
+    border-radius: 3px;
+}
+
+.error {
+    color: tomato;
 }
 
 @media (min-width: 576px) {

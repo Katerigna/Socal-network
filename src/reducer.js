@@ -37,7 +37,7 @@ export default function reducer(state = {}, action) {
     if (action.type === "GET_MESSAGES") {
         state = {
             ...state,
-            chatMessages: action.chatMessages
+            chatMessages: action.chatMessages.reverse()
         };
     }
     if (action.type === "ADD_MESSAGE") {

@@ -24,7 +24,7 @@ export default class Login extends React.Component {
             .post("/login", this.state)
             .then(response => {
                 console.log("Response from post Login: ", response);
-                if (!response.data) {
+                if (response.data == "error on login") {
                     this.setState({
                         error:
                             "Oooops! Something went wrong... Please try again."
@@ -46,7 +46,7 @@ export default class Login extends React.Component {
             <div>
                 <h2>Please enter your email and password</h2>
 
-                <h3>{this.state.error}</h3>
+                <h3 className="error">{this.state.error}</h3>
 
                 <form onSubmit={this.handleSubmit} className="form-wrap">
                     <label htmlFor="email" />

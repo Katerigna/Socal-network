@@ -8,6 +8,7 @@ import OtherProfile from "./otherprofile";
 import FindPeople from "./findpeople";
 import Friends from "./friends";
 import Chat from "./chat";
+import Logout from "./logout";
 
 export default class App extends React.Component {
     constructor(props) {
@@ -102,6 +103,8 @@ export default class App extends React.Component {
                             imageurl={this.state.imageurl}
                             toggleModal={this.toggleModal}
                         />
+
+                        <Logout />
                     </header>
 
                     <Route

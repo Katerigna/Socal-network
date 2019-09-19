@@ -5,13 +5,11 @@ import { useSelector, useDispatch } from "react-redux";
 
 export default function Chat() {
     const chatMessages = useSelector(state => state.chatMessages);
-    console.log("chatMessages", chatMessages);
 
     const keyCheck = e => {
-        console.log("A key was pressed", e.key);
         if (e.key == "Enter") {
             e.preventDefault();
-            console.log(e.target.value);
+
             socket.emit("My chat message", e.target.value);
             e.target.value = "";
         }
@@ -20,12 +18,6 @@ export default function Chat() {
     const elemRef = useRef();
 
     useEffect(() => {
-        console.log("chatMessages in useEffect", chatMessages);
-        console.log("chat mounted");
-        console.log("element", elemRef.current);
-        console.log("scroll from top", elemRef.current.scrollTop);
-        console.log("scroll height", elemRef.current.scrollHeight);
-        console.log("client height", elemRef.current.clientHeight);
         elemRef.current.scrollTop =
             elemRef.current.scrollHeight - elemRef.current.clientHeight;
     }, [chatMessages]);
@@ -33,14 +25,25 @@ export default function Chat() {
     return (
         <div className="chat-container">
             <h1>Chat Room</h1>
-            <div className="chat-messages" ref={elemRef}>
+            <div className="chat-messages-list" ref={elemRef}>
                 <ul>
                     {chatMessages &&
-                        chatMessages.reverse().map(chatMessage => (
-                            <li key={chatMessage.id}>
+                        chatMessages.map(chatMessage => (
+                            <li
+                                key={chatMessage.id}
+                                className="chat-message-item"
+                            >
                                 <Link to={"/user/" + chatMessage.sender_id}>
                                     <img height="50" src={chatMessage.url} />
                                 </Link>
+
+                                <p className="chat-message-sender">
+                                    {chatMessage.first}
+                                </p>
+                                <p className="chat-message-sender">
+                                    {chatMessage.last} says:
+                                </p>
+
                                 <p>{chatMessage.message}</p>
                             </li>
                         ))}

@@ -1,6 +1,7 @@
 import React from "react";
 import ProfilePic from "./profilepic";
 import BioEditor from "./bioeditor";
+import DeleteProfile from "./deleteprofile";
 
 export default function Profile({
     first,
@@ -25,6 +26,8 @@ export default function Profile({
             />
 
             <BioEditor bio={bio} setBio={setBio} />
+
+            <DeleteProfile />
         </div>
     );
 }
