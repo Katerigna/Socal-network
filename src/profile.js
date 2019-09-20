@@ -12,22 +12,24 @@ export default function Profile({
     setBio
 }) {
     return (
-        <div>
-            <h1>
-                {first} {last}
-            </h1>
+        <div className="profile-wrapper">
+            <div className="profile-container">
+                <h1>
+                    {first} {last}
+                </h1>
 
-            <ProfilePic
-                first="first"
-                last="last"
-                imageurl={imageurl}
-                toggleModal={toggleModal}
-                alt={first && last}
-            />
+                <ProfilePic
+                    first="first"
+                    last="last"
+                    imageurl={imageurl}
+                    toggleModal={toggleModal}
+                    alt={first && last}
+                />
 
-            <BioEditor bio={bio} setBio={setBio} />
+                <BioEditor bio={bio} setBio={setBio} />
 
-            <DeleteProfile />
+                <DeleteProfile />
+            </div>
         </div>
     );
 }

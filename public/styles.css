@@ -1,6 +1,7 @@
 * {
     box-sizing: border-box;
     color: #93b8d3;
+    font-family: "Source Sans Pro", sans-serif;
 }
 
 body {
@@ -19,6 +20,10 @@ header .link {
 }
 
 header .link:hover {
+    color: white;
+}
+
+a:hover {
     color: white;
 }
 
@@ -51,6 +56,80 @@ header .link:hover {
     border-radius: 4px;
 }
 
+button,
+.button {
+    width: 110px;
+    height: 25px;
+    margin-top: 20px;
+    background-color: #f7b633;
+    color: #29538d;
+    border-color: #29538d;
+    border-radius: 4px;
+}
+
+.button {
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+    font-size: 0.8em;
+    font-family: sans-serif;
+    padding-top: 3px;
+}
+
+button:hover,
+.button:hover {
+    border-color: white;
+}
+
+.profile-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.profile-container {
+    border: 1px solid #93b8d3;
+    border-radius: 5px;
+    background-color: rgba(255, 255, 255, 0.1);
+    height: 510px;
+    width: 700px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    overflow-y: scroll;
+}
+
+.profile-container p {
+    padding: 0 100px;
+    text-align: center;
+}
+
+.bioeditor {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.bioeditor p {
+    padding: 0 50px;
+    font-size: 25px;
+}
+
+textarea {
+    border: 1px solid #93b8d3;
+    border-radius: 5px;
+    background-color: rgba(255, 255, 255, 0.1);
+    height: 50px;
+    width: 300px;
+}
+
+textarea:hover {
+    border-color: white;
+}
+
 .uploader {
     position: fixed;
     top: 50%;
@@ -62,13 +141,18 @@ header .link:hover {
     max-height: 100%;
     border: 1px solid #93b8d3;
     border-radius: 5px;
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: rgba(255, 255, 255, 0.7);
     padding: 0 20px;
+}
+
+.uploader-form h3,
+.uploader-form input {
+    color: #29538d;
 }
 
 .userpic {
     max-height: 150px;
-    max-height: 200px;
+
     border-radius: 20px;
 }
 
@@ -79,6 +163,7 @@ header .link:hover {
 
 .find-people-container li {
     display: flex;
+    flex-direction: column;
     margin: 20px;
 }
 
@@ -88,10 +173,15 @@ header .link:hover {
 
 .user-link {
     text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    align-items: end;
 }
 
-.user-link {
+.search-box {
     display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .friends-container,
@@ -159,7 +249,7 @@ header .link:hover {
     color: tomato;
 }
 
-@media (min-width: 576px) {
+/* @media (min-width: 576px) {
     .find-people-container {
         display: flex;
         flex-direction: column;
@@ -175,4 +265,4 @@ header .link:hover {
     .userpic {
         width: 180px;
     }
-}
+} */

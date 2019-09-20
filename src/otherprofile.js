@@ -33,18 +33,25 @@ export default function OtherProfile({ match, history }) {
     }, [id]);
 
     return (
-        <div>
-            {error && <p>{error}</p>}
+        <div className="profile-wrapper">
+            <div className="profile-container">
+                {error && <p>{error}</p>}
 
-            <h1>
-                {first} {last}
-            </h1>
+                <h1>
+                    {first} {last}
+                </h1>
 
-            <img height="200" src={imageurl} alt={first && last} />
+                <img
+                    className="userpic"
+                    height="200"
+                    src={imageurl}
+                    alt={first && last}
+                />
 
-            <p>{bio}</p>
+                <p>{bio}</p>
 
-            <FriendButton id={id} />
+                <FriendButton id={id} />
+            </div>
         </div>
     );
 }

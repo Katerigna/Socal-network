@@ -44,27 +44,27 @@ export default class Login extends React.Component {
     render() {
         return (
             <div>
-                <h2>Please enter your email and password</h2>
+                <h2>Sign in</h2>
 
                 <h3 className="error">{this.state.error}</h3>
 
                 <form onSubmit={this.handleSubmit} className="form-wrap">
                     <label htmlFor="email" />
+                    Email:
                     <input
                         type="email"
                         name="email"
                         value={this.state.name}
                         onChange={this.handleChange}
                     />
-
                     <label htmlFor="password" />
+                    Password:
                     <input
                         type="password"
                         name="password"
                         value={this.state.name}
                         onChange={this.handleChange}
                     />
-
                     <button>Submit</button>
                 </form>
             </div>

@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getFriendsWannabes, unfriend, acceptFriends } from "./actions";
+import { Link } from "react-router-dom";
 
 export default function Friends() {
     const dispatch = useDispatch();
@@ -36,10 +37,15 @@ export default function Friends() {
                     friends.map((friend, index) => {
                         return (
                             <div key={index}>
-                                <img src={friend.url} className="userpic" />
-                                <p>
-                                    {friend.first} {friend.last}
-                                </p>
+                                <Link
+                                    to={"/user/" + friend.id}
+                                    className="user-link"
+                                >
+                                    <img src={friend.url} className="userpic" />
+                                    <p>
+                                        {friend.first} {friend.last}
+                                    </p>
+                                </Link>
                                 <button
                                     onClick={e => {
                                         dispatch(unfriend(friend.id));

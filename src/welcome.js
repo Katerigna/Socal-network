@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Registration from "./registration";
 import Login from "./login";
 import App from "./app";
@@ -9,15 +9,13 @@ export default function Welcome() {
         <HashRouter>
             <div className="welcome-container">
                 <img src="logo.png" />
-
                 <div className="form-container">
                     <h1>Welcome!</h1>
 
                     <Route path="/login" component={Login} />
                     <Route exact path="/" component={Registration} />
                 </div>
-
-                <Link to="/login">log in</Link>
+                <Link to="/login"></Link>
             </div>
         </HashRouter>
     );

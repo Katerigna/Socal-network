@@ -35,7 +35,7 @@ export default class Uploader extends React.Component {
     render() {
         return (
             <div className="uploader">
-                <form onSubmit={this.handleSubmit}>
+                <form onSubmit={this.handleSubmit} className="uploader-form">
                     <h3>Choose your image:</h3>
 
                     <label htmlFor="file">Choose</label>

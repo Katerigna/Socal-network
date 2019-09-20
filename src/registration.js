@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import axios from "./axios";
+import { HashRouter, Route, Link } from "react-router-dom";
 
 export default class Registation extends React.Component {
     constructor(props) {
@@ -52,39 +53,46 @@ export default class Registation extends React.Component {
 
                 <form onSubmit={this.handleSubmit} className="form-wrap">
                     <label htmlFor="first" />
+                    First name:
                     <input
                         type="text"
                         name="first"
                         value={this.state.name}
                         onChange={this.handleChange}
                     />
-
                     <label htmlFor="last" />
+                    Last name:
                     <input
                         type="text"
                         name="last"
                         value={this.state.last}
                         onChange={this.handleChange}
                     />
-
                     <label htmlFor="email" />
+                    Email:
                     <input
                         type="email"
                         name="email"
                         value={this.state.email}
                         onChange={this.handleChange}
                     />
-
                     <label htmlFor="password" />
+                    Password:
                     <input
                         type="password"
                         name="password"
                         value={this.state.password}
                         onChange={this.handleChange}
                     />
-
                     <button>Submit</button>
                 </form>
+
+                <HashRouter>
+                    <h3>
+                        or&nbsp;&nbsp;
+                        <Link to="/login">Log in</Link>
+                    </h3>
+                </HashRouter>
             </div>
         );
     }

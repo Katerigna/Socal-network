@@ -39,30 +39,35 @@ export default function FindPeople() {
             <ul className="find-people-container">
                 {recentUsers.map(recentUser => (
                     <li key={recentUser.id}>
-                        <img
-                            src={recentUser.url}
-                            alt="first"
-                            className="userpic"
-                        />
-                        <div className="user-info">
-                            <p>
-                                <Link
-                                    to={"/user/" + recentUser.id}
-                                    className="user-link"
-                                >
+                        <Link
+                            to={"/user/" + recentUser.id}
+                            className="user-link"
+                        >
+                            <img
+                                src={recentUser.url}
+                                alt="first"
+                                className="userpic"
+                            />
+                        </Link>
+                        <Link
+                            to={"/user/" + recentUser.id}
+                            className="user-link"
+                        >
+                            <div className="user-info">
+                                <p>
                                     {recentUser.first} {recentUser.last}
-                                </Link>
-                            </p>
-
-                            <p>{recentUser.bio}</p>
-                        </div>
+                                </p>
+                            </div>
+                        </Link>
                     </li>
                 ))}
             </ul>
 
-            <h3>Find people by name</h3>
+            <div className="search-box">
+                <h3>Find people by name</h3>
 
-            <input onChange={e => setFoundUsers(e.target.value)} />
+                <input onChange={e => setFoundUsers(e.target.value)} />
+            </div>
         </div>
     );
 }

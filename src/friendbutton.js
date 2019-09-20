@@ -76,6 +76,7 @@ export default function FriendButton({ id }) {
             type="submit"
             value={friendStatus}
             onClick={handleFriendStatus}
+            className="button"
         ></input>
     );
 }

@@ -10,6 +10,7 @@ export default class BioEditor extends React.Component {
         this.handleChange = this.handleChange.bind(this);
         this.handleSave = this.handleSave.bind(this);
         this.editBio = this.editBio.bind(this);
+        this.handleClose = this.handleClose.bind(this);
     }
 
     handleChange(e) {
@@ -40,23 +41,30 @@ export default class BioEditor extends React.Component {
         });
     }
 
+    handleClose(e) {
+        e.preventDefault();
+        this.setState({
+            isEditing: false
+        });
+    }
+
     render() {
         return (
             <div>
                 {this.props.bio ? (
-                    <div>
-                        <h3>About me:</h3>
+                    <div className="bioeditor">
+                        <h2>About me:</h2>
                         <p>{this.props.bio}</p>
-                        <button onClick={this.editBio}>Edit</button>
+                        <button onClick={this.editBio}>Change bio</button>
                     </div>
                 ) : (
                     <button onClick={this.editBio}>Add bio</button>
                 )}
 
                 {this.state.isEditing && (
-                    <form onSubmit={this.handleSave}>
+                    <form onSubmit={this.handleSave} className="bioeditor">
+                        <button onClick={this.handleClose}>Close</button>
                         <label htmlFor="bio">
-                            Tell us about yourself:
                             <textarea name="bio" onChange={this.handleChange} />
                         </label>
 
